@@ -6,6 +6,7 @@ description = "The simplest Solana Geyser Plugin ever"
 authors = ["mwrites <mwrites.pub@pm.me>"]
 repository = "https://github.com/mwrites/solana-geyser-plugin-scaffold"
 license = "Apache-2.0"
+keywords = ["solana", "geyser", "plugin", "solana-geyser-plugin"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]
