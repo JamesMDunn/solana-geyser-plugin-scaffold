@@ -1,3 +1,15 @@
+- [The Simplest Geyser Plugin Ever](#the-simplest-geyser-plugin-ever)
+    - [What's a Solana Geyser Plugin?](#whats-a-solana-geyser-plugin)
+    - [Solana Geyser Plugin Scaffold](#solana-geyser-plugin-scaffold)
+    - [Try It!](#try-it)
+    - [Examples Plugin Implementations](#examples-plugin-implementations)
+- [Going Further](#going-further)
+    - [Geyser Plugin Config](#geyser-plugin-config)
+    - [Read More On The Plugin Manager](#read-more-on-the-plugin-manager)
+    - [What's Next?](#whats-next)
+    - [A Note On Performance](#a-note-on-performance)
+    - [Debugging](#debugging)
+
 # The Simplest Geyser Plugin Ever
 
 ### What's a Solana Geyser Plugin?
