@@ -33,6 +33,12 @@ Plugin or validator crashing?
 ./scripts/check_errors.sh
 ```
 
+Debug
+```bash
+You can try attaching to the solana validator process 
+from your IDE. (Given it has not crashed yet. 🤓)
+```
+
 ### Geyser Plugin Config
 
 The dynamic library path is provided to the validator using the `--geyser-plugin-config` parameter.
