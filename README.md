@@ -14,7 +14,7 @@ The library can then feed on these data and take further actions, such as loggin
 This is the simplest geyser plugin implementation you will encounter, all it does is log every calls from the plugin manager to our plugin scaffold.
 This is a good start to familiarize yourself with the plugin workflow, and most importantly debug.
 
-/!\ The code is for educational purpose, in a production setting, you would want to remove any fancy logs and do the minimum work possible in the _hooks_ by leveraging threads, different process or external services, etc...
+> ⚠️ The code is for educational purpose, in a production setting, you would want to remove any fancy logs and do the minimum work possible in the _hooks_ by leveraging threads, different process or external services, etc...
 
 ### Try It!
 
@@ -33,11 +33,21 @@ Plugin or validator crashing?
 ./scripts/check_errors.sh
 ```
 
-Debug
-```bash
-You can try attaching to the solana validator process 
-from your IDE. (Given it has not crashed yet. 🤓)
-```
+---
+
+### Examples Plugin Implementations
+- [A PostgreSQL Plugin](https://github.com/solana-labs/solana-accountsdb-plugin-postgres)
+- [A Plugin Sending to a gRPC Service](https://github.com/ckamm/solana-accountsdb-connector)
+- [A RabbitMQ Producer Plugin](https://github.com/holaplex/indexer-geyser-plugin)
+- [A Complete Architecture Around The Geyser Plugin](https://github.com/holaplex/indexer)
+- [A Kafka Producer Plugin](https://github.com/Blockdaemon/solana-accountsdb-plugin-kafka)
+- [An Amazon SQS Plugin](https://github.com/rpcpool/solana-accountsdb-sqs)
+- [A Google BigTable Plugin](https://github.com/lijunwangs/solana-accountsdb-plugin-bigtable)
+- [A RPC server serving requests from a PostgreSQL database](https://github.com/lijunwangs/solana-postgres-rpc-server)
+
+---
+
+# Going Further
 
 ### Geyser Plugin Config
 
@@ -63,9 +73,6 @@ For example:
 Additionally, at runtime the Solana Plugin Manager will pass back the path to that config file to your plugin. The `config_file` path will be provided on the [on_load(&mut self, config_file: &str)](https://docs.rs/solana-geyser-plugin-interface/latest/solana_geyser_plugin_interface/geyser_plugin_interface/trait.GeyserPlugin.html#method.on_load) lifecycle event.
 So you can add any additional config you think your plugin might need. And parse it when your plugin gets loaded.
 
----
-
-# Going Further
 
 ### Read More On The Plugin Manager
 - [The Geyser Plugin Manager: The Guy Calling Your Plugin](https://github.com/solana-labs/solana/tree/master/geyser-plugin-manager)
@@ -89,12 +96,50 @@ Indeed your plugin is running part of the validator, and the validator is ...ext
 
 You might need one of the above solution, or combine all of them. The answer lies into your needs, your own infrastructure, and your team size.
 
-### Examples Plugin Implementations
-- [A PostgreSQL Plugin](https://github.com/solana-labs/solana-accountsdb-plugin-postgres)
-- [A Plugin Sending to a gRPC Service](https://github.com/ckamm/solana-accountsdb-connector)
-- [A RabbitMQ Producer Plugin](https://github.com/holaplex/indexer-geyser-plugin)
-- [A Complete Architecture Around The Geyser Plugin](https://github.com/holaplex/indexer)
-- [A Kafka Producer Plugin](https://github.com/Blockdaemon/solana-accountsdb-plugin-kafka)
-- [An Amazon SQS Plugin](https://github.com/rpcpool/solana-accountsdb-sqs)
-- [A Google BigTable Plugin](https://github.com/lijunwangs/solana-accountsdb-plugin-bigtable)
-- [A RPC server serving requests from a PostgreSQL database](https://github.com/lijunwangs/solana-postgres-rpc-server)
+### Debugging
+
+**(Recommended way)**
+
+Using your IDE, add some breakpoints in your library, find the option to attach to the `solana-test-validator` process, and you can now debug your library code! For example, that is how you do it in [CLion](https://www.jetbrains.com/help/clion/attaching-to-local-process.html).
+
+
+
+**The terminal way**
+
+It's a bit hardcore, but it can be helpful to debug on your production machine. (If your IDE allows remote debugging with reverse SSH tunneling, please go for it!)
+
+1. Run the validator
+
+2. Use lldb to attach to the process:
+
+```bash
+lldb -p `pgrep -x solana-test-validator`
+```
+
+3. At this point, the process has paused for you:
+
+   ```
+   (lldb) Process XXXXX stopped
+   ```
+
+4. You can now set breakpoints in your library:
+
+```bash
+(lldb) breakpoint set --name update_account 
+```
+
+5. Resume running:
+
+```bash
+(lldb) continue
+Process 22436 resuming
+```
+
+6. lldb hit your breakpoint:
+
+```bash
+thread #113, name = 'solPohTickProd', stop reason = breakpoint 1.1
+frame #0: 0x000000010563ecd8 libsolana_geyser_plugin_scaffold.dylib`_$LT$solana_geyser_plugin_scaffold..geyser_plugin_hook..GeyserPluginHook$u20$as$u20$solana_geyser_plugin_interface..geyser_plugin_interface..GeyserPlugin$GT$::update_account::h6833f303509d44fe(self=0x0000000000000001, account=ReplicaAccountInfoVersions @ 0x00000002c4dc1c18, slot=16082, is_startup=false) at geyser_plugin_hook.rs:51:15
+```
+
+[Read more on LLDB commands.](https://lldb.llvm.org/use/tutorial.html)
