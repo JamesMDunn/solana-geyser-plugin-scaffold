@@ -57,10 +57,31 @@ For example:
 Additionally, at runtime the Solana Plugin Manager will pass back the path to that config file to your plugin. The `config_file` path will be provided on the [on_load(&mut self, config_file: &str)](https://docs.rs/solana-geyser-plugin-interface/latest/solana_geyser_plugin_interface/geyser_plugin_interface/trait.GeyserPlugin.html#method.on_load) lifecycle event.
 So you can add any additional config you think your plugin might need. And parse it when your plugin gets loaded.
 
+---
 
-### Going Further
+# Going Further
 
+### Read More On The Plugin Manager
 - [The Geyser Plugin Manager: The Guy Calling Your Plugin](https://github.com/solana-labs/solana/tree/master/geyser-plugin-manager)
+
+### What's Next?
+The starter project might be simple, but the most important for you is to be able to debug and see the logs.
+
+Indeed, if you can get the data through, what's next is really up to you. The question is what will you do of these data?
+- Will you forward this log into a log service?
+- Will you insert this into a DB? And create specific indexing for your own needs?
+- Will you build a whole consumer/producer system with Kafka and other queuing pipelines?
+- The sky is the limit, go ship something! 🚀
+
+### A Note On Performance
+Moving forward, please make sure to do the minimum of work into the trait callbacks! And not just the callbacks, but any synchronous execution paths that originates from them.
+
+Indeed your plugin is running part of the validator, and the validator is ...extremly busy! You need to make sure to return as quickly as possible from the callbacks and do the minimum of work. From there, there are multiple strategies:
+- Leverage threads where possible.
+- Dispatch the hard work into an external process, or even outside the validator's machine.
+- Take advantage of a queuing system, to scale and multiply the possibility around your data pipeline.
+
+You might need one of the above solution, or combine all of them. The answer lies into your needs, your own infrastructure, and your team size.
 
 ### Examples Plugin Implementations
 - [A PostgreSQL Plugin](https://github.com/solana-labs/solana-accountsdb-plugin-postgres)
