@@ -55,7 +55,7 @@ Plugin or validator crashing?
 - [A Kafka Producer Plugin](https://github.com/Blockdaemon/solana-accountsdb-plugin-kafka)
 - [An Amazon SQS Plugin](https://github.com/rpcpool/solana-accountsdb-sqs)
 - [A Google BigTable Plugin](https://github.com/lijunwangs/solana-accountsdb-plugin-bigtable)
-- [A RPC server serving requests from a PostgreSQL database](https://github.com/lijunwangs/solana-postgres-rpc-server)
+- [A Creative Way To Use The Geyser Plugin](https://github.com/clockwork-xyz/clockwork)
 
 ---
 
